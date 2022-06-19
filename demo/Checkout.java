@@ -12,21 +12,25 @@ import java.text.DecimalFormat;
 //import demo.Tool.ToolType;
 
 public class Checkout {
-    private Tool tool;
-    private Charge charge;
-    private int numDays;
-    private LocalDate outDate;
-    private LocalDate dueDate;
-    private int discount;
-    private int chargeDays;
-    private float startPrice;
-    private float discountPrice;
-    private float finalPrice;
-    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yy");
-    private DecimalFormat df = new DecimalFormat();
+    public Tool tool;
+    public Charge charge;
+    public int numDays;
+    public LocalDate outDate;
+    public LocalDate dueDate;
+    public int discount;
+    public int chargeDays;
+    public float startPrice;
+    public float discountPrice;
+    public float finalPrice;
+    public DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yy");
+    public DecimalFormat df = new DecimalFormat();
 
-    public Checkout(Tool tool, Charge charge, LocalDate date, int numdays, int discount)
+    public Checkout(Tool tool, Charge charge, LocalDate date, int numdays, int discount) throws IllegalArgumentException
     {
+        if(numdays < 1 || discount < 0 || discount > 100)
+        {
+            throw new IllegalArgumentException("Cannot be illegal day or discount argument");
+        }
         df.setMaximumFractionDigits(2);
         this.tool = tool;
         this.charge = charge;
@@ -38,7 +42,7 @@ public class Checkout {
     }
     
     //generate the contract based on input values
-    private void generateContract()
+    public void generateContract()
     {
         dueDate = outDate.plusDays(numDays);
         chargeDays = calculateChargeDays();
@@ -73,6 +77,15 @@ public class Checkout {
                         currentday = currentday.plusDays(2);
                         
                     }
+                    else if(currentday.getDayOfWeek() == DayOfWeek.SATURDAY)
+                    {
+                        if(!charge.getWeekend() && numChargeDays > 0)
+                        {
+                            //Friday was charged
+                            numChargeDays--;
+                        }
+                        currentday = currentday.plusDays(1);
+                    }
                     else 
                     {
                         currentday = currentday.plusDays(1);
@@ -86,7 +99,7 @@ public class Checkout {
                     continue;
                 }
                 //july 4th edge case where last day is Friday July 3rd and Holidays are off
-                if(currentday.getMonth() == Month.JULY && currentday.getDayOfMonth() == 3 && i == numDays)
+                if(currentday.getMonth() == Month.JULY && currentday.getDayOfMonth() == 3 && currentday.getDayOfWeek() == DayOfWeek.FRIDAY && i == numDays)
                 {
                     continue;
                 }

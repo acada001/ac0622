@@ -14,21 +14,9 @@ public class Main{
         Console c = System.console();
         HashMap<String, Tool> tools = createTools();
         HashMap<ToolType, Charge> charges = createCharges();
-        //create a tool
-        // ToolType t = ToolType.LADDER;
-        // String toolCode = "LADW";
-        // String brand = "Werner";
-        // Tool tool = new Tool(toolCode, t, brand);
-        // Charge charge = new Charge(t, 1.99f, true, true, true);
-        // String day = "09/03/15";
-        // int numDays = 5;
-        // int discount = 20;
 
-         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yy");//.withResolverStyle(ResolverStyle.STRICT);;
-         //LocalDate date = LocalDate.parse(day, dtf);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yy");
 
-        // Checkout check = new Checkout(tool, charge, date, numDays, discount);
-        // check.printContract();
         String userInput = "";
         LocalDate date = LocalDate.now();
         int numDays = 0;
