@@ -4,10 +4,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Calendar;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.lang.StringBuilder;
@@ -61,7 +57,6 @@ public class Checkout {
         LocalDate currentday = outDate.plusDays(1);
         for(int i = 1; i <= numDays; i++)
         {
-            System.out.println(currentday.getDayOfWeek());
             if(!charge.getHoliday())
             {
                 //check july 4th
@@ -98,6 +93,7 @@ public class Checkout {
 
             }
             
+            //check weekends
             if(!charge.getWeekend())
             {
                 if((currentday.getDayOfWeek() == DayOfWeek.SATURDAY) || (currentday.getDayOfWeek() == DayOfWeek.SUNDAY))
@@ -112,6 +108,7 @@ public class Checkout {
 
         return numChargeDays;
     }
+    //shcekc to see if date is laborday
     private boolean isLaborDay(LocalDate date)
     {
         boolean laborDay = false;
